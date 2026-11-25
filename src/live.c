@@ -17,13 +17,30 @@ typedef struct {
 } list_t;
 
 void add_item(list_t* items, char* name, double cost) {
-    // TODO
+    // Alloker memory til noden
+    node_t* new_node = malloc(sizeof(node_t));
+    // Kopier data ind i item delen
+    new_node->item.cost = cost;
+    strcpy(new_node->item.name, name);
+    // Tilføj new_node til starten af listen items
+    new_node->next = items->head;
+    items->head = new_node;
 }
 void print_items(list_t items) {
-    // TODO
+    node_t* current = items.head;
+    while (current != NULL) {
+        printf("%s %lf\n", current->item.name, current->item.cost);
+        current = current->next;
+    }
 }
 void deallocate_list(list_t* list) {
-    // TODO
+    node_t* current = list->head;
+    while (current != NULL) {
+        node_t* next = current->next;
+        free(current);
+        current = next;
+    }
+    list->head = NULL;
 }
 
 int main(void) {
@@ -39,10 +56,12 @@ int main(void) {
         }
         // Add item with name and cost to the list
         // TODO: add_item
+        add_item(&list_of_items, name, cost);
     }
     // TODO: print_items
+    print_items(list_of_items);
 
-    // TODO: deallocate_list
+    deallocate_list(&list_of_items);
 
     return 0;
 }

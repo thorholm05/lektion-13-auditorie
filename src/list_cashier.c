@@ -27,7 +27,7 @@ typedef struct {
 } list_t;
 
 /**
- * Adds an item to a list of items (first argument). This function prepends the item to the list.
+ * Adds an item to a list of items (first argument). This function appends the item to the list.
  * @param items: a valid list struct
  * @param name: the name of the item to add
  * @param cost: the cost of the item to add
@@ -35,11 +35,25 @@ typedef struct {
 void add_item(list_t* items, char* name, double cost) {
     // Start by allocating space for a new node. The node already contains enough space for the item.
     node_t* new_node = (node_t*)malloc(sizeof(node_t));
-    new_node->next = items->head;  // Push the next element down
+    new_node->next = NULL;
     new_node->item.cost = cost;
     strcpy(new_node->item.name, name);
-    // Put the new element at the start of the list.
-    items->head = new_node;
+
+    // If the list is empty, put the new element at the start.
+    if (items->head == NULL) {
+        items->head = new_node;
+    }
+    else {
+        node_t* current = items->head;
+
+        // Find the last element in the list.
+        while (current->next != NULL) {
+            current = current->next;
+        }
+
+        // Put the new element at the end of the list.
+        current->next = new_node;
+    }
 }
 
 /**
@@ -52,6 +66,38 @@ void print_items(list_t items) {
         printf("%s %lf\n", current->item.name, current->item.cost);
         current = current->next;  // Move to the next element
     }
+}
+
+/**
+ * Calculates the number of items in the list.
+ * @param items: a valid list struct
+ */
+int count_items(list_t items) {
+    int count = 0;
+    node_t* current = items.head;
+
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+
+    return count;
+}
+
+/**
+ * Calculates the total price of all items in the list.
+ * @param items: a valid list struct
+ */
+double total_price(list_t items) {
+    double total = 0;
+    node_t* current = items.head;
+
+    while (current != NULL) {
+        total += current->item.cost;
+        current = current->next;
+    }
+
+    return total;
 }
 
 /**
@@ -87,11 +133,13 @@ int main(void) {
     // Print all items
     print_items(list_of_items);
 
-    // TODO: Auditorieopgave A
-    //    1) Calculate number of items
-    //    2) Calculate total price
+    // Auditorieopgave A
+    //    1) Skriv en funktion der beregner antal varer i listen.
+    printf("Number of items: %d\n", count_items(list_of_items));
 
-    // Remember to clean up before we stop
+    //    2) Skriv en funktion der beregner summen af varernes pris i listen.
+    printf("Total price: %.2f\n", total_price(list_of_items));
+
     deallocate_list(&list_of_items);
     return 0;
 }
