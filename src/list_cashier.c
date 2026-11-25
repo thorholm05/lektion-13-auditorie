@@ -63,7 +63,7 @@ void add_item(list_t* items, char* name, double cost) {
 void print_items(list_t items) {
     node_t* current = items.head;
     while (current != NULL) {  // We know that the NULL pointer signals the end of the list
-        printf("%s %lf\n", current->item.name, current->item.cost);
+        printf("%s %.2lf kr\n", current->item.name, current->item.cost);
         current = current->next;  // Move to the next element
     }
 }
@@ -138,7 +138,7 @@ int main(void) {
     printf("Number of items: %d\n", count_items(list_of_items));
 
     //    2) Skriv en funktion der beregner summen af varernes pris i listen.
-    printf("Total price: %.2f\n", total_price(list_of_items));
+    printf("Total price: %.2f kr\n", total_price(list_of_items));
 
     deallocate_list(&list_of_items);
     return 0;
